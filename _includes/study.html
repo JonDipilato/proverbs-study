@@ -4,7 +4,7 @@
 <article class="study">
   <p class="eyebrow">{{ s.date | date: "%A, %B %-d, %Y" }} · <a href="{{ '/chapters/' | relative_url }}#ch-{{ s.chapter }}">Chapter {{ s.chapter }}</a></p>
   <h1 class="study-title">{% if include.link %}<a href="{{ s.url | relative_url }}">{{ s.title }}</a>{% else %}{{ s.title }}{% endif %}</h1>
-  {% if s.hook %}<p class="hook">{{ s.hook }}</p>{% else %}<div class="hook-gap"></div>{% endif %}
+  {% if s.hook %}<p class="hook">{{ s.hook | markdownify | remove: '<p>' | remove: '</p>' | strip }}</p>{% else %}<div class="hook-gap"></div>{% endif %}
 
   <section class="scripture" aria-label="Scripture">
     <div class="medallion" aria-hidden="true">
@@ -44,10 +44,10 @@
   <section class="block">
     <h2><span class="num">III</span>Obey it today</h2>
     <ol class="actions">
-      {% for a in s.actions %}<li><span class="action-n" aria-hidden="true">{{ forloop.index }}</span><p>{{ a }}</p></li>
+      {% for a in s.actions %}<li><span class="action-n" aria-hidden="true">{{ forloop.index }}</span><p>{{ a | markdownify | remove: '<p>' | remove: '</p>' | strip }}</p></li>
       {% endfor %}
     </ol>
-    <p class="prayer"><span class="prayer-label">Prayer</span>{{ s.prayer }}</p>
+    <p class="prayer"><span class="prayer-label">Prayer</span>{{ s.prayer | markdownify | remove: '<p>' | remove: '</p>' | strip }}</p>
   </section>
 
   <section class="keep">
