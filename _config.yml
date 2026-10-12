@@ -1,0 +1,24 @@
+title: Daily Proverbs
+description: One passage of Proverbs a day — the King James text, the Hebrew opened up, and three things to do before noon.
+author: Jon DiPilato
+url: https://jondipilato.github.io
+baseurl: /proverbs-study
+lang: en
+timezone: America/New_York
+permalink: /:year/:month/:day/:title/
+future: true
+markdown: kramdown
+plugins:
+  - jekyll-feed
+feed:
+  path: feed.xml
+defaults:
+  - scope: { path: "", type: posts }
+    values: { layout: study }
+exclude:
+  - scripts
+  - README.md
+  - ROUTINE.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor

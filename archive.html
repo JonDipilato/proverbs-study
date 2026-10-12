@@ -1,0 +1,17 @@
+---
+layout: default
+title: Every study
+permalink: /archive/
+description: Every daily Proverbs study, newest first.
+---
+<h1 class="page-title">Every study</h1>
+<p class="page-lede">{{ site.posts.size }} studies so far, newest first.</p>
+{% assign months = site.posts | group_by_exp: "p", "p.date | date: '%B %Y'" %}
+{% for m in months %}
+<h2 class="section-label">{{ m.name }}</h2>
+<ul class="list">
+  {% for p in m.items %}
+  <li><a href="{{ p.url | relative_url }}"><span class="list-date">{{ p.date | date: "%a %b %-d" }}</span><span class="list-ref">{{ p.reference }}</span><span class="list-title">{{ p.title }}</span></a></li>
+  {% endfor %}
+</ul>
+{% endfor %}

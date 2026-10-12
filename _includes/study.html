@@ -1,0 +1,60 @@
+{% assign s = include.s %}
+{% assign focus = s.words | where: "focus", true | first %}
+{% if focus == nil %}{% assign focus = s.words | first %}{% endif %}
+<article class="study">
+  <p class="eyebrow">{{ s.date | date: "%A, %B %-d, %Y" }} · <a href="{{ '/chapters/' | relative_url }}#ch-{{ s.chapter }}">Chapter {{ s.chapter }}</a></p>
+  <h1 class="study-title">{% if include.link %}<a href="{{ s.url | relative_url }}">{{ s.title }}</a>{% else %}{{ s.title }}{% endif %}</h1>
+  <p class="hook">{{ s.hook }}</p>
+
+  <section class="scripture" aria-label="Scripture">
+    <div class="medallion" aria-hidden="true">
+      <span class="medallion-he" lang="he" dir="rtl">{{ focus.hebrew }}</span>
+      <span class="medallion-tr">{{ focus.translit }}</span>
+    </div>
+    {% for v in s.kjv %}
+    <blockquote class="verse">
+      <p>{{ v.text }}</p>
+      <cite>Proverbs {{ v.ref }}</cite>
+    </blockquote>
+    {% endfor %}
+  </section>
+
+  <section class="block">
+    <h2><span class="num">I</span>The Hebrew, opened up</h2>
+    <ul class="words">
+      {% for w in s.words %}
+      <li class="word{% if w.focus %} is-focus{% endif %}">
+        <div class="word-head">
+          <span class="word-he" lang="he" dir="rtl">{{ w.hebrew }}</span>
+          <span class="word-tr">{{ w.translit }}</span>
+          <a class="chip" href="{{ '/words/' | relative_url }}#{{ w.strongs }}" title="Every study with Strong's {{ w.strongs }}">{{ w.strongs }}</a>
+        </div>
+        <p class="word-mean">{{ w.meaning }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+    <p class="note">{{ s.word_note | markdownify | remove: '<p>' | remove: '</p>' | strip }}</p>
+  </section>
+
+  <section class="block prose">
+    <h2><span class="num">II</span>What this actually means</h2>
+    {{ s.content }}
+  </section>
+
+  <section class="block">
+    <h2><span class="num">III</span>Obey it today</h2>
+    <ol class="actions">
+      {% for a in s.actions %}<li><span class="action-n" aria-hidden="true">{{ forloop.index }}</span><p>{{ a }}</p></li>
+      {% endfor %}
+    </ol>
+    <p class="prayer"><span class="prayer-label">Prayer</span>{{ s.prayer }}</p>
+  </section>
+
+  <section class="keep">
+    <p class="keep-label">Keep this in your chest</p>
+    <p class="keep-text">“{{ s.keep | default: s.kjv[0].text }}”</p>
+    <p class="keep-ref">{{ s.reference }}</p>
+    <button class="share" type="button" data-share-url="{{ s.url | absolute_url }}" data-share-title="{{ s.reference }} — {{ s.title | escape }}">Share this study</button>
+    <p class="share-status" role="status" aria-live="polite"></p>
+  </section>
+</article>

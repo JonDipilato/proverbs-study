@@ -1,0 +1,8 @@
+---
+layout: default
+---
+{% include study.html s=page %}
+<nav class="pager" aria-label="More studies">
+  {% if page.previous %}<a class="pager-prev" href="{{ page.previous.url | relative_url }}"><span>Earlier</span>{{ page.previous.reference }} — {{ page.previous.title }}</a>{% else %}<span></span>{% endif %}
+  {% if page.next %}<a class="pager-next" href="{{ page.next.url | relative_url }}"><span>Later</span>{{ page.next.reference }} — {{ page.next.title }}</a>{% endif %}
+</nav>

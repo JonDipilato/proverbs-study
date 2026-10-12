@@ -1,0 +1,29 @@
+---
+layout: default
+title: Chapters
+permalink: /chapters/
+description: Proverbs has 31 chapters — one for each day of the month. Every study, filed under its chapter.
+---
+<h1 class="page-title">31 chapters, one a day</h1>
+<p class="page-lede">The day of the month picks the chapter. Every study lands here under its chapter, so each month adds a new passage.</p>
+<div class="ch-grid">
+  {% for n in (1..31) %}
+  {% assign studies = site.posts | where: "chapter", n %}
+  <a class="ch-tile{% if studies.size == 0 %} is-empty{% endif %}" href="#ch-{{ n }}"><span class="ch-n">{{ n }}</span><span class="ch-c">{{ studies.size }}</span></a>
+  {% endfor %}
+</div>
+{% for n in (1..31) %}
+{% assign studies = site.posts | where: "chapter", n | sort: "date" %}
+<section class="ch" id="ch-{{ n }}">
+  <h2 class="ch-head"><span class="ch-big">{{ n }}</span>Chapter {{ n }}</h2>
+  {% if studies.size == 0 %}
+  <p class="ch-none">No study yet. It comes up on day {{ n }} of the month.</p>
+  {% else %}
+  <ul class="list">
+    {% for p in studies %}
+    <li><a href="{{ p.url | relative_url }}"><span class="list-date">{{ p.date | date: "%b %-d, %Y" }}</span><span class="list-ref">{{ p.reference }}</span><span class="list-title">{{ p.title }}</span></a></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</section>
+{% endfor %}

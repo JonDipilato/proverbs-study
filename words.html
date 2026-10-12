@@ -1,0 +1,33 @@
+---
+layout: default
+title: Hebrew words
+permalink: /words/
+description: Every Hebrew word opened up in the daily studies, by Strong's number, linked to each verse it shows up in.
+---
+<h1 class="page-title">The Hebrew words</h1>
+<p class="page-lede">Every word opened up so far, by Strong's number. Tap a verse to read that study.</p>
+<label class="filter"><span>Find a word</span><input id="word-filter" type="search" placeholder="Type a word, like chokmah or H2451" autocomplete="off"></label>
+{% assign entries = "" | split: "" %}
+{% for p in site.posts %}{% for w in p.words %}
+{% assign num = w.strongs | remove: "H" | plus: 0 | plus: 100000 %}
+{% capture e %}{{ num }}§{{ w.strongs }}§{{ w.translit }}§{{ w.hebrew }}§{{ p.url | relative_url }}§{{ p.reference }}§{{ w.focus }}§{{ p.date | date: "%Y%m%d" }}{% endcapture %}
+{% assign entries = entries | push: e %}
+{% endfor %}{% endfor %}
+{% assign entries = entries | sort %}
+<ul class="gloss">
+{% assign current = "" %}
+{% for e in entries %}
+  {% assign f = e | split: "§" %}
+  {% if f[1] != current %}
+    {% unless forloop.first %}</ul></li>{% endunless %}
+    {% assign current = f[1] %}
+    {% capture search %}{% for x in entries %}{% assign g = x | split: "§" %}{% if g[1] == current %}{{ g[2] | downcase | remove: "'" | remove: "’" | remove: "ʼ" }} {% endif %}{% endfor %}{{ current | downcase }}{% endcapture %}
+  <li class="gloss-item" id="{{ f[1] }}" data-search="{{ search | strip | escape }}">
+    <div class="gloss-head"><span class="word-he" lang="he" dir="rtl">{{ f[3] }}</span><span class="word-tr">{{ f[2] }}</span><span class="chip">{{ f[1] }}</span></div>
+    <ul class="gloss-refs">
+  {% endif %}
+      <li><a href="{{ f[4] }}"{% if f[6] == "true" %} class="is-focus"{% endif %}>{{ f[5] }}</a></li>
+  {% if forloop.last %}</ul></li>{% endif %}
+{% endfor %}
+</ul>
+<p id="word-empty" class="ch-none" hidden>No word matches that yet.</p>
