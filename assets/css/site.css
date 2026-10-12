@@ -50,7 +50,7 @@ main.wrap { padding-top: var(--s5); padding-bottom: var(--s7); }
 
 /* Study */
 .eyebrow { margin: 0 0 var(--s2); font: 500 12px/1.4 var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--chrome-dim); }
-.eyebrow a { color: var(--brass); text-decoration: none; }
+.eyebrow a { color: var(--brass); text-decoration: none; white-space: nowrap; }
 .study-title, .page-title {
   margin: 0 0 var(--s2);
   font: 700 clamp(34px, 8vw, 56px)/1.04 var(--display);
