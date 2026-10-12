@@ -14,6 +14,6 @@ HARD RULES: Write exactly ONE new file, `_posts/<date>-proverbs-<CH>-<V>.md`. Ne
 
 5. CHECK. Run `python3 scripts/study.py check --new <your file>`. It must print CHECK PASSED. If it fails, fix YOUR file and run it again. Never touch another file to make it pass.
 
-6. PUBLISH. `git add <your file>` (only that file), `git commit -m "Proverbs CH:VV — <title> (<WEEKDAY>, <Mon DD>)"`, `git push origin HEAD:main`. If the push is rejected, `git pull --rebase origin main` and push once more. If it still fails, STOP and report the exact error loudly — do NOT claim success.
+6. PUBLISH. `git add <your file>` (only that file), `git commit -m "Proverbs CH:VV — <title> (<WEEKDAY>, <Mon DD>)"` — the message is that ONE line only: no Co-Authored-By, no Claude-Session, no "Generated with" footer, no trailers of any kind (the repo owner forbids AI branding on commits), `git push origin HEAD:main`. If the push is rejected, `git pull --rebase origin main` and push once more. If it still fails, STOP and report the exact error loudly — do NOT claim success.
 
 7. REPORT the file name, verse range, focus word(s), the commit hash, and the page URL: https://jondipilato.github.io/proverbs-study/YYYY/MM/DD/<file-name-without-date-and-.md>/ (Pages takes about a minute to rebuild after the push).
