@@ -46,7 +46,7 @@ a:hover { color: var(--brass-soft); }
 .nav a { color: var(--chrome-dim); text-decoration: none; font: 500 11px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; padding: 10px 8px; border-radius: 6px; }
 .nav a:hover, .nav a[aria-current="page"] { color: var(--brass); }
 
-main { padding-top: var(--s5); padding-bottom: var(--s7); }
+main.wrap { padding-top: var(--s5); padding-bottom: var(--s7); }
 
 /* Study */
 .eyebrow { margin: 0 0 var(--s2); font: 500 12px/1.4 var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--chrome-dim); }
@@ -173,7 +173,7 @@ a.chip:hover { border-color: var(--brass-deep); }
 
 @media (min-width: 720px) {
   .wrap { padding: 0 var(--s4); }
-  main { padding-top: var(--s7); }
+  main.wrap { padding-top: var(--s7); }
   .nav { gap: 8px; }
   .nav a { font-size: 12px; padding: 10px 12px; }
   .scripture { padding: var(--s6) var(--s6) var(--s5); }
@@ -188,3 +188,4 @@ a.chip:hover { border-color: var(--brass-deep); }
   .top, .foot, .share, .share-status, .pager, .recent { display: none; }
   .scripture, .word, .actions li { background: none; border-color: #ccc; }
 }
+.hook-gap { height: var(--s4); }

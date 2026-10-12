@@ -17,7 +17,9 @@ ROOT = Path(__file__).resolve().parent.parent
 POSTS = ROOT / "_posts"
 NAME = re.compile(r"^(\d{4}-\d{2}-\d{2})-proverbs-(\d{1,2})-(\d{1,3})(?:-(\d{1,3}))?\.md$")
 HEBREW = re.compile(r"[֐-׿]")
-REQUIRED = ["title", "reference", "chapter", "verses", "hook", "kjv", "words", "word_note", "actions", "prayer"]
+REQUIRED = ["title", "reference", "chapter", "verses", "kjv", "words", "actions", "prayer"]
+# Some imported Drive studies have no hook or word note; every NEW study must have both.
+REQUIRED_NEW = ["hook", "word_note"]
 
 
 def load(path):
@@ -133,6 +135,10 @@ def cmd_check(new):
             problems.append(f"--new file {new} is missing or failed validation")
         else:
             me = infos[np.name]
+            d, _ = load(np)
+            for k in REQUIRED_NEW:
+                if not d.get(k):
+                    problems.append(f"{np.name}: missing or empty '{k}' (required for every new study)")
             for name, i in infos.items():
                 if name == np.name:
                     continue
