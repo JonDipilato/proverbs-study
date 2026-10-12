@@ -29,7 +29,7 @@
           <span class="word-tr">{{ w.translit }}</span>
           <a class="chip" href="{{ '/words/' | relative_url }}#{{ w.strongs }}" title="Every study with Strong's {{ w.strongs }}">{{ w.strongs }}</a>
         </div>
-        <p class="word-mean">{{ w.meaning }}</p>
+        <p class="word-mean">{{ w.meaning | markdownify | remove: '<p>' | remove: '</p>' | strip }}</p>
       </li>
       {% endfor %}
     </ul>
