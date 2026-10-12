@@ -5,7 +5,7 @@ layout: default
 {% if latest %}
 {% include study.html s=latest link=true %}
 <section class="recent">
-  <h2 class="section-label">Earlier this week</h2>
+  <h2 class="section-label">Earlier studies</h2>
   <ul class="list">
     {% for p in site.posts offset:1 limit:6 %}
     <li><a href="{{ p.url | relative_url }}"><span class="list-date">{{ p.date | date: "%a %b %-d" }}</span><span class="list-ref">{{ p.reference }}</span><span class="list-title">{{ p.title }}</span></a></li>

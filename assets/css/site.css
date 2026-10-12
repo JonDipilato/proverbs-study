@@ -189,3 +189,4 @@ a.chip:hover { border-color: var(--brass-deep); }
   .scripture, .word, .actions li { background: none; border-color: #ccc; }
 }
 .hook-gap { height: var(--s4); }
+.gloss-mean { margin: 0 0 12px; color: var(--chrome-dim); font-size: 15px; }

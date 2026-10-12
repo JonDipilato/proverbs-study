@@ -53,7 +53,7 @@
   <section class="keep">
     <p class="keep-label">Keep this in your chest</p>
     <p class="keep-text">“{{ s.keep | default: s.kjv[0].text }}”</p>
-    <p class="keep-ref">{{ s.reference }}</p>
+    <p class="keep-ref">{% if s.keep %}{{ s.reference }}{% else %}Proverbs {{ s.kjv[0].ref }}{% endif %}</p>
     <button class="share" type="button" data-share-url="{{ s.url | absolute_url }}" data-share-title="{{ s.reference }} — {{ s.title | escape }}">Share this study</button>
     <p class="share-status" role="status" aria-live="polite"></p>
   </section>

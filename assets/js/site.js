@@ -25,10 +25,12 @@ document.querySelectorAll('.share').forEach(function (btn) {
 // Words page: filter the glossary as you type.
 var filter = document.getElementById('word-filter');
 if (filter) {
+  var strip = function (t) { return t.toLowerCase().replace(/['’ʼ]/g, '').replace(/[\u0591-\u05C7]/g, ''); };
   var rows = Array.prototype.slice.call(document.querySelectorAll('.gloss-item'));
+  rows.forEach(function (r) { r.dataset.search = strip(r.textContent); });
   var empty = document.getElementById('word-empty');
   filter.addEventListener('input', function () {
-    var q = filter.value.trim().toLowerCase().replace(/['’ʼ]/g, '');
+    var q = strip(filter.value.trim());
     var shown = 0;
     rows.forEach(function (r) {
       var hit = !q || r.dataset.search.indexOf(q) !== -1;
@@ -40,5 +42,7 @@ if (filter) {
 }
 
 // Chapters page: mark today's chapter (day of the month).
-var todayTile = document.querySelector('.ch-tile[href$="#ch-' + new Date().getDate() + '"]');
+// Day of the month in Eastern time, the same clock the daily study runs on.
+var easternDay = Number(new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', day: 'numeric' }).format(new Date()));
+var todayTile = document.querySelector('.ch-tile[href$="#ch-' + easternDay + '"]');
 if (todayTile) todayTile.classList.add('is-today');

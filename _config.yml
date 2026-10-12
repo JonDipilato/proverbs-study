@@ -6,7 +6,7 @@ baseurl: /proverbs-study
 lang: en
 timezone: America/New_York
 permalink: /:year/:month/:day/:title/
-future: true
+future: false
 markdown: kramdown
 plugins:
   - jekyll-feed
