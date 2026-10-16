@@ -18,6 +18,7 @@
   <meta property="og:url" content="{{ page.url | absolute_url }}">
   <link rel="canonical" href="{{ page.url | absolute_url }}">
   {% feed_meta %}
+  <link rel="alternate" type="application/rss+xml" title="Daily Proverbs podcast" href="{{ '/podcast.xml' | absolute_url }}">
 </head>
 <body>
   <header class="top">
@@ -28,6 +29,7 @@
         <a href="{{ '/chapters/' | relative_url }}"{% if page.url == '/chapters/' %} aria-current="page"{% endif %}>Chapters</a>
         <a href="{{ '/words/' | relative_url }}"{% if page.url == '/words/' %} aria-current="page"{% endif %}>Words</a>
         <a href="{{ '/archive/' | relative_url }}"{% if page.url == '/archive/' %} aria-current="page"{% endif %}>All</a>
+        <a href="{{ '/listen/' | relative_url }}"{% if page.url == '/listen/' %} aria-current="page"{% endif %}>Listen</a>
       </nav>
     </div>
   </header>
@@ -37,7 +39,7 @@
   <footer class="foot">
     <div class="wrap foot-row">
       <p>Scripture: King James Version (public domain). Hebrew: Westminster Leningrad Codex with Strong's tags from the Open Scriptures Hebrew Bible (CC BY 4.0). Each new study's verse text and Hebrew words are checked against both before it is published.</p>
-      <p><a href="{{ '/feed.xml' | relative_url }}">RSS feed</a> · <a href="https://github.com/JonDipilato/proverbs-study">Source on GitHub</a></p>
+      <p><a href="{{ '/listen/' | relative_url }}">Podcast</a> · <a href="{{ '/feed.xml' | relative_url }}">RSS feed</a> · <a href="https://github.com/JonDipilato/proverbs-study">Source on GitHub</a></p>
     </div>
   </footer>
   <script src="{{ '/assets/js/site.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>

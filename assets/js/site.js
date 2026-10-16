@@ -46,3 +46,77 @@ if (filter) {
 var easternDay = Number(new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', day: 'numeric' }).format(new Date()));
 var todayTile = document.querySelector('.ch-tile[href$="#ch-' + easternDay + '"]');
 if (todayTile) todayTile.classList.add('is-today');
+
+// Listen: play the narrated study. Lock-screen controls where the phone supports them.
+document.querySelectorAll('.listen').forEach(function (box) {
+  var audio = box.querySelector('audio');
+  var btn = box.querySelector('.listen-play');
+  var seek = box.querySelector('.listen-seek');
+  var now = box.querySelector('.listen-now');
+  var status = box.querySelector('.listen-status');
+  var dragging = false;
+  var fmt = function (t) { t = Math.max(0, Math.floor(t || 0)); return Math.floor(t / 60) + ':' + ('0' + (t % 60)).slice(-2); };
+  var paint = function (t) {
+    now.textContent = fmt(t);
+    seek.style.setProperty('--fill', (seek.max > 0 ? (t / seek.max) * 100 : 0) + '%');
+  };
+
+  btn.addEventListener('click', function () {
+    status.textContent = '';
+    if (audio.paused) {
+      box.classList.add('is-loading');
+      var p = audio.play();
+      if (p && p.catch) p.catch(function (err) {
+        box.classList.remove('is-loading');
+        if (err.name !== 'AbortError') status.textContent = 'Could not start the audio: ' + err.message;
+      });
+    } else {
+      audio.pause();
+    }
+  });
+  audio.addEventListener('playing', function () {
+    box.classList.remove('is-loading');
+    box.classList.add('is-playing');
+    btn.setAttribute('aria-label', 'Pause');
+    if ('mediaSession' in navigator && window.MediaMetadata) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: box.dataset.title, artist: 'Daily Proverbs',
+        artwork: [{ src: box.dataset.art, sizes: '600x600', type: 'image/jpeg' }]
+      });
+    }
+  });
+  audio.addEventListener('pause', function () {
+    box.classList.remove('is-playing', 'is-loading');
+    btn.setAttribute('aria-label', 'Play');
+  });
+  audio.addEventListener('loadedmetadata', function () { if (isFinite(audio.duration)) seek.max = Math.round(audio.duration); });
+  audio.addEventListener('timeupdate', function () { if (!dragging) { seek.value = audio.currentTime; paint(audio.currentTime); } });
+  audio.addEventListener('ended', function () { seek.value = 0; paint(0); });
+  audio.addEventListener('error', function () {
+    box.classList.remove('is-playing', 'is-loading');
+    status.textContent = 'The audio would not load here. Use Download MP3 instead.';
+  });
+  seek.addEventListener('input', function () { dragging = true; paint(Number(seek.value)); });
+  var pending = null;
+  seek.addEventListener('change', function () {
+    dragging = false;
+    if (audio.readyState === 0) { pending = Number(seek.value); audio.load(); }
+    else audio.currentTime = Number(seek.value);
+  });
+  audio.addEventListener('loadedmetadata', function () {
+    if (pending !== null) { audio.currentTime = pending; pending = null; }
+  });
+});
+
+// Listen page: copy the podcast link for any podcast app.
+document.querySelectorAll('[data-copy]').forEach(function (btn) {
+  var status = btn.parentElement.querySelector('.share-status');
+  btn.addEventListener('click', function () {
+    var text = btn.dataset.copy;
+    if (!navigator.clipboard) { status.textContent = 'Copy this link: ' + text; return; }
+    navigator.clipboard.writeText(text).then(
+      function () { status.textContent = 'Link copied. Paste it into your podcast app.'; },
+      function () { status.textContent = 'Copy this link: ' + text; }
+    );
+  });
+});

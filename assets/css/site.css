@@ -179,14 +179,54 @@ a.chip:hover { border-color: var(--brass-deep); }
   .scripture { padding: var(--s6) var(--s6) var(--s5); }
   .list a { grid-template-columns: 120px 1fr; }
 }
-@media (max-width: 400px) {
+@media (max-width: 480px) {
   .mark { font-size: 0; gap: 0; }
   .mark-aleph { font-size: 18px; }
 }
+@media (max-width: 560px) {
+  .nav a { padding: 10px 5px; letter-spacing: 0.08em; }
+}
+@media (max-width: 340px) {
+  .nav a { padding: 10px 3px; font-size: 10px; letter-spacing: 0.04em; }
+}
 @media print {
   body { background: #fff; color: #111; }
-  .top, .foot, .share, .share-status, .pager, .recent { display: none; }
+  .top, .foot, .share, .share-status, .pager, .recent, .listen { display: none; }
   .scripture, .word, .actions li { background: none; border-color: #ccc; }
 }
 .hook-gap { height: var(--s4); }
 .gloss-mean { margin: 0 0 12px; color: var(--chrome-dim); font-size: 15px; }
+
+/* Listen: narrated audio of the study */
+.listen { display: grid; grid-template-columns: 64px 1fr; gap: var(--s2); align-items: center; margin: calc(var(--s5) * -0.5) 0 var(--s5); padding: var(--s2); border: 1px solid var(--brass-deep); border-radius: 18px; background: linear-gradient(180deg, var(--brass-wash), var(--panel)); }
+.listen-play { appearance: none; border: 0; cursor: pointer; display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; color: #1A1206; background: linear-gradient(180deg, var(--brass-soft), var(--brass) 48%, #C8911F); box-shadow: 0 8px 24px rgba(230, 178, 62, 0.22); }
+.listen-play:hover { filter: brightness(1.06); }
+.listen-play svg { width: 28px; height: 28px; fill: currentColor; }
+.listen-play .i-pause, .listen.is-playing .listen-play .i-play { display: none; }
+.listen.is-playing .listen-play .i-pause { display: block; }
+.listen.is-loading .listen-play { animation: listen-pulse 1.1s ease-in-out infinite; }
+@keyframes listen-pulse { 50% { filter: brightness(0.82); } }
+.listen-body { min-width: 0; }
+.listen-row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s2); }
+.listen-label { font: 500 11px/1 var(--mono); letter-spacing: 0.22em; text-transform: uppercase; color: var(--brass); }
+.listen-time { font: 500 12px/1 var(--mono); letter-spacing: 0.04em; color: var(--chrome-dim); font-variant-numeric: tabular-nums; }
+.listen-seek { -webkit-appearance: none; appearance: none; width: 100%; height: 28px; margin: 4px 0 2px; background: transparent; cursor: pointer; --fill: 0%; }
+.listen-seek::-webkit-slider-runnable-track { height: 4px; border-radius: 4px; background: linear-gradient(90deg, var(--brass) var(--fill), var(--line) var(--fill)); }
+.listen-seek::-moz-range-track { height: 4px; border-radius: 4px; background: var(--line); }
+.listen-seek::-moz-range-progress { height: 4px; border-radius: 4px; background: var(--brass); }
+.listen-seek::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; margin-top: -6px; border-radius: 50%; background: var(--brass-soft); border: 0; }
+.listen-seek::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--brass-soft); border: 0; }
+.listen-links { display: flex; flex-wrap: wrap; gap: 4px var(--s2); font-size: 14px; }
+.listen-links a { text-decoration: none; }
+.listen-status { margin: 0; font-size: 14px; color: var(--chrome-dim); }
+.listen-status:empty { display: none; }
+
+/* Listen page */
+.sub-list { list-style: none; margin: 0 0 var(--s5); padding: 0; display: grid; gap: 12px; }
+.sub-card { padding: var(--s3); border: 1px solid var(--line); border-radius: 16px; background: var(--panel); }
+.sub-card h2 { margin: 0 0 6px; font: 700 21px/1.25 var(--display); color: #F4F1EA; }
+.sub-card p { margin: 0 0 var(--s2); color: var(--chrome-dim); font-size: 16px; }
+.sub-card .share { display: inline-flex; align-items: center; text-decoration: none; }
+.sub-card .share:hover { color: #1A1206; }
+.feed-url { display: block; margin: 0 0 var(--s2); padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--ink); font: 500 13px/1.4 var(--mono); color: var(--chrome); overflow-wrap: anywhere; }
+.sub-cover { display: block; width: 160px; height: 160px; margin: 0 0 var(--s4); border-radius: 18px; border: 1px solid var(--line); }

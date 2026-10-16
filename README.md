@@ -8,6 +8,7 @@ One passage of Proverbs a day: the King James text, the Hebrew opened up word by
 - **Chapters** — 31 chapters, one per day of the month. Every study is filed under its chapter, so each month adds a new passage to each one.
 - **Words** — every Hebrew word studied so far, by Strong's number, linked to each verse it appears in.
 - **RSS** — `feed.xml`, for anyone who wants it in a reader.
+- **Listen** — every study is narrated. Each page has a play button and a Download MP3 link, and `podcast.xml` is a podcast feed (subscribe page: `/listen/`).
 
 ## How it runs
 
@@ -20,6 +21,19 @@ A Claude Code cloud routine fires every morning at 10:00 UTC (6 AM Eastern in su
 5. It commits that one file, pushes to `main`, and confirms the page is live.
 
 Studies from Aug 31 – Oct 12, 2026 were imported word for word from the earlier Google Drive version (each file's `source:` line names the original doc).
+
+## Audio
+
+`.github/workflows/audio.yml` runs whenever a study lands on `main` (and twice each morning as a backstop). For every study with no entry in `_data/audio.yml` it:
+
+1. Builds the narration with `scripts/audio.py`: date, title and hook, the KJV verses, each Hebrew word and its meaning, the word note, the body, the three actions, the prayer, and the keep verse.
+2. Reads it with the Piper `en-us-ryan-high` voice and saves a 64 kbps mono MP3 with the cover art embedded.
+3. Uploads the MP3 to the `audio` release (so the repo stays small) and records its URL, size and length in `_data/audio.yml`.
+4. Commits that file and asks Pages to rebuild. The player and the podcast feed read from it.
+
+Hebrew words are spoken from the word row's `say` spelling, then `scripts/data/say.json` (every word from the imported studies), then the transliteration as a fallback. To preview a narration: `python3 scripts/audio.py script _posts/FILE.md`. To redo an episode, delete its entry from `_data/audio.yml` and run the workflow.
+
+Cover art: `assets/img/podcast-cover.jpg` (3000 px, for podcast directories) and `podcast-cover-600.jpg` (embedded in each MP3).
 
 ## Text sources
 

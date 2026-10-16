@@ -1,0 +1,44 @@
+---
+layout: null
+permalink: /podcast.xml
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Daily Proverbs</title>
+    <link>{{ '/' | absolute_url }}</link>
+    <atom:link href="{{ '/podcast.xml' | absolute_url }}" rel="self" type="application/rss+xml"/>
+    <language>en-us</language>
+    <description>One passage of Proverbs a day, read aloud in about four minutes: the King James text, the Hebrew words opened up, what it actually means, three things to do before noon, and a one-line prayer.</description>
+    <itunes:summary>One passage of Proverbs a day, read aloud in about four minutes: the King James text, the Hebrew words opened up, what it actually means, three things to do before noon, and a one-line prayer.</itunes:summary>
+    <itunes:author>Jon DiPilato</itunes:author>
+    <itunes:owner>
+      <itunes:name>Jon DiPilato</itunes:name>
+      <itunes:email>jondipilato@dipilatoautomations.com</itunes:email>
+    </itunes:owner>
+    <itunes:image href="{{ '/assets/img/podcast-cover.jpg' | absolute_url }}"/>
+    <image>
+      <url>{{ '/assets/img/podcast-cover.jpg' | absolute_url }}</url>
+      <title>Daily Proverbs</title>
+      <link>{{ '/' | absolute_url }}</link>
+    </image>
+    <itunes:category text="Religion &amp; Spirituality">
+      <itunes:category text="Christianity"/>
+    </itunes:category>
+    <itunes:explicit>false</itunes:explicit>
+    <itunes:type>episodic</itunes:type>
+    <copyright>Scripture: King James Version (public domain). Hebrew: Westminster Leningrad Codex with Strong's tags from the Open Scriptures Hebrew Bible (CC BY 4.0).</copyright>
+    {% for p in site.posts %}{% capture k %}{{ p.date | date: "%Y-%m-%d" }}-{{ p.slug }}{% endcapture %}{% assign a = site.data.audio[k] %}{% if a %}
+    <item>
+      <title>{{ p.reference }} · {{ p.title | xml_escape }}</title>
+      <description>{% if p.hook %}{{ p.hook | strip_html | xml_escape }} {% endif %}{% for v in p.kjv %}“{{ v.text | xml_escape }}” Proverbs {{ v.ref }}. {% endfor %}Read the full study: {{ p.url | absolute_url }}</description>
+      <link>{{ p.url | absolute_url }}</link>
+      <guid isPermaLink="false">{{ k }}</guid>
+      <pubDate>{{ p.date | date_to_rfc822 }}</pubDate>
+      <enclosure url="{{ a.url }}" length="{{ a.bytes }}" type="audio/mpeg"/>
+      <itunes:duration>{{ a.seconds }}</itunes:duration>
+      <itunes:explicit>false</itunes:explicit>
+      <itunes:episodeType>full</itunes:episodeType>
+    </item>{% endif %}{% endfor %}
+  </channel>
+</rss>

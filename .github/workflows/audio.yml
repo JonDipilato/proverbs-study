@@ -1,0 +1,95 @@
+name: Narrate studies
+
+# Every study gets a narrated MP3. The MP3 lives on the "audio" release (so the repo
+# stays small), and _data/audio.yml tells the site and podcast.xml where each one is.
+on:
+  push:
+    branches: [main]
+    paths: ["_posts/**"]
+  schedule:
+    - cron: "45 10 * * *"   # backstop after the 10:00 UTC study routine
+    - cron: "15 13 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: narrate
+  cancel-in-progress: false
+
+jobs:
+  narrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PIPER_BIN: ${{ github.workspace }}/../piper/piper/piper
+      PIPER_MODEL: ${{ github.workspace }}/../piper/voice/en-us-ryan-high.onnx
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Tools
+        run: |
+          pip install pyyaml
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+
+      - name: Cache voice
+        id: voice
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/../piper
+          key: piper-2023.11.14-2-ryan-high-v0.0.2
+
+      - name: Download voice
+        if: steps.voice.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ../piper/voice
+          curl -fsSL https://github.com/rhasspy/piper/releases/download/2023.11.14-2/piper_linux_x86_64.tar.gz | tar xz -C ../piper
+          curl -fsSL https://github.com/rhasspy/piper/releases/download/v0.0.2/voice-en-us-ryan-high.tar.gz | tar xz -C ../piper/voice
+
+      - name: Narrate every study that has no audio yet
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          gh release view audio >/dev/null 2>&1 || gh release create audio --title "Daily Proverbs audio" \
+            --notes "Narrated episodes, one per study. Built by .github/workflows/audio.yml." --latest=false
+
+          publish() {
+            if git diff --quiet -- _data/audio.yml && [ -z "$(git ls-files --others -- _data/audio.yml)" ]; then return 0; fi
+            git add _data/audio.yml
+            git commit -q -m "$1"
+            for attempt in 1 2 3; do
+              if git push -q origin HEAD:main; then break; fi
+              [ "$attempt" = 3 ] && { echo "::error::push failed three times"; exit 1; }
+              git pull -q --rebase origin main
+            done
+            # Pushes made with the workflow token may not rebuild Pages on their own.
+            gh api -X POST "repos/$GITHUB_REPOSITORY/pages/builds" >/dev/null \
+              || echo "::warning::could not request a Pages rebuild; the player shows up on the next site build"
+          }
+
+          mapfile -t posts < <(python3 scripts/audio.py pending)
+          echo "${#posts[@]} studies need audio"
+          mkdir -p out
+          done_count=0
+          for p in "${posts[@]}"; do
+            name=$(basename "$p" .md)
+            python3 scripts/audio.py build "$p" "out/$name.mp3" >/dev/null
+            gh release upload audio "out/$name.mp3" --clobber
+            python3 scripts/audio.py record "$p" "out/$name.mp3" \
+              "https://github.com/$GITHUB_REPOSITORY/releases/download/audio/$name.mp3"
+            done_count=$((done_count + 1))
+            # Newest study goes live right away; the backlog publishes in batches.
+            if [ "$done_count" = 1 ] || [ $((done_count % 8)) = 0 ]; then
+              publish "Audio: $name"
+            fi
+          done
+          publish "Audio: $done_count studies"

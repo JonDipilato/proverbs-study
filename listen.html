@@ -1,0 +1,31 @@
+---
+layout: default
+title: Listen
+permalink: /listen/
+description: Get each day's Proverbs study read aloud, delivered to your podcast app every morning.
+---
+{% assign feed = '/podcast.xml' | absolute_url %}
+{% assign bare = feed | remove: 'https://' %}
+<h1 class="page-title">Listen every morning</h1>
+<p class="page-lede">Each day's study, read aloud in about four minutes. Subscribe once and every new one lands on your phone by morning.</p>
+<img class="sub-cover" src="{{ '/assets/img/podcast-cover-600.jpg' | relative_url }}" alt="Daily Proverbs cover art" width="160" height="160">
+
+<ul class="sub-list">
+  <li class="sub-card">
+    <h2>iPhone</h2>
+    <p>Opens straight in Apple Podcasts. Tap Follow and you're set.</p>
+    <a class="share" href="podcast://{{ bare }}">Open in Apple Podcasts</a>
+  </li>
+  <li class="sub-card">
+    <h2>Android or any other podcast app</h2>
+    <p>Copy the show link, then in Pocket Casts, Podcast Addict, AntennaPod, or Overcast choose “add by URL” and paste it.</p>
+    <code class="feed-url">{{ feed }}</code>
+    <button class="share" type="button" data-copy="{{ feed }}">Copy the show link</button>
+    <p class="share-status" role="status" aria-live="polite"></p>
+  </li>
+  <li class="sub-card">
+    <h2>Just today's</h2>
+    <p>Every study page has a play button and a Download MP3 link you can text to anyone.</p>
+    <a href="{{ '/' | relative_url }}">Go to today's study →</a>
+  </li>
+</ul>
