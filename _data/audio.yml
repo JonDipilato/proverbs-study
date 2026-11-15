@@ -1,4 +1,8 @@
 # Written by scripts/audio.py from .github/workflows/audio.yml. One entry per narrated study.
+"2026-11-15-proverbs-15-16-17":
+  url: "https://github.com/JonDipilato/proverbs-study/releases/download/audio/2026-11-15-proverbs-15-16-17.mp3"
+  bytes: 2368882
+  seconds: 292
 "2026-11-14-proverbs-14-15-16":
   url: "https://github.com/JonDipilato/proverbs-study/releases/download/audio/2026-11-14-proverbs-14-15-16.mp3"
   bytes: 2276083
